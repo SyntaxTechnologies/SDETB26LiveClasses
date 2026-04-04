@@ -13,8 +13,6 @@ public class Iphone10 {
         System.out.println("Can Store upto 128GB");
     }
 
-
-
 }
  class Iphone11 extends Iphone10{
 
