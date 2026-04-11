@@ -3,6 +3,7 @@ package org.example.class9;
 public class AnimalTester {
     static void main() {
 
+        Cat c2=new Cat();
         Animal c=new Cat();
 
         //double []nums={10,20,30,40.5};
