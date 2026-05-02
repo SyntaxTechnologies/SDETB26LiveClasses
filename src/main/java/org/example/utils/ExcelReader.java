@@ -14,26 +14,32 @@ import java.util.Map;
 
 public class ExcelReader {
 
-    public static List<Map<String,String>> read() throws IOException {
-        String path="Files/Employees.xlsx";
-        FileInputStream fis=new FileInputStream(path);
-        XSSFWorkbook excelFile=new XSSFWorkbook(fis);
-        Sheet sheet=excelFile.getSheet("HR");
+    public static List<Map<String, String>> read() {
+        String path = "Files/Employees.xlsx";
 
+        ArrayList<Map<String, String>> sheetData = new ArrayList<>();
 
-        ArrayList<Map<String,String>> sheetData=new ArrayList<>();
-        Row headerRow=sheet.getRow(0);
-        for (int rowNo = 1; rowNo < 7; rowNo++) {
-            Row actualRow=sheet.getRow(rowNo);
+        try (FileInputStream fis = new FileInputStream(path);
+             XSSFWorkbook excelFile = new XSSFWorkbook(fis);) {
+            Sheet sheet = excelFile.getSheet("HR");
 
-            Map<String,String> rowMap=new LinkedHashMap<>();
-            for (int CellNo = 0; CellNo < 5; CellNo++) {
+            Row headerRow = sheet.getRow(0);
+            for (int rowNo = 1; rowNo < sheet.getPhysicalNumberOfRows(); rowNo++) {
+                Row actualRow = sheet.getRow(rowNo);
 
-                String key=headerRow.getCell(CellNo).toString();
-                String value=actualRow.getCell(CellNo).toString();
-                rowMap.put(key,value);
+                Map<String, String> rowMap = new LinkedHashMap<>();
+                for (int CellNo = 0; CellNo < actualRow.getPhysicalNumberOfCells(); CellNo++) {
+
+                    String key = headerRow.getCell(CellNo).toString();
+                    String value = actualRow.getCell(CellNo).toString();
+                    rowMap.put(key, value);
+                }
+                sheetData.add(rowMap);
             }
-            sheetData.add(rowMap);
+
+
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
         }
 
         return sheetData;
